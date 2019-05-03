@@ -1,4 +1,4 @@
-# Introduction
+## Overview
 This repository can provide you python scripts which can be used:
 
 #### Unified Collaboration Products
@@ -12,7 +12,8 @@ This repository can provide you python scripts which can be used:
 #### Gateways
   7. BoM Creation (Under Development)
 
-**Pre-Requisites:** Following are the pre-requisites for the script to function properly:
+## Pre-Requisites
+Following are the pre-requisites for the script to function properly:
 
  - Refer **requirements.txt** for python version and libraries required to run the scripts.
  - Convert python scripts to executable files (here is a small [video](https://www.youtube.com/watch?v=lOIJIk_maO4) on how it can be done).
@@ -28,9 +29,9 @@ This repository can provide you python scripts which can be used:
         - Standard RealtimeAndTraceCollection
         - Standard SERVICEABILITY Administration
     - Make sure you can access CUCM WSDL (as this script uses WSDL Implementation). Links to check:
-        - **Verify AXL**: https://<ipaddress>:8443/axl/
-        - **Verify ServiceWSDL**: https://<ipaddress>:8443/controlcenterservice/services/ControlCenterServicesPort
-        - **Verify RISWSDL**: https://<ipaddress>:8443/realtimeservice2/services/RISService70?wsdl
+        - **Verify AXL**: https://ipaddress:8443/axl/
+        - **Verify ServiceWSDL**: https://ipaddress:8443/controlcenterservice/services/ControlCenterServicesPort
+        - **Verify RISWSDL**: https://ipaddress:8443/realtimeservice2/services/RISService70?wsdl
     - For Login Checks, web scrapping mechanism is used.
   
   - **Video Endpoints**:
