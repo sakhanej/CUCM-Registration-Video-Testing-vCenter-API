@@ -20,7 +20,7 @@ Following are the pre-requisites for the script to function properly:
  - **Unified Collaboration Products**:
     - Make sure following services are functioning properly:
         - SOAP -Real-Time Service APIs
-	      - SOAP -Performance Monitoring APIs
+	- SOAP -Performance Monitoring APIs
         - Cisco AXL Web Service
     - Configure 1 application user with following roles:
         - Standard AXL API Access
