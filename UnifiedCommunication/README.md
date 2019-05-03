@@ -69,5 +69,5 @@
        - Report can be used as input to further script logic.
 
 
-# Reference Code : 
-  Cluster_Checks_Reference.py
+## Reference Code : 
+- Refer code **ReferenceCode.py** for quick KT. This code imports class and functions from "Cluster_Checks" and "firmwareanalysis".
