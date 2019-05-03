@@ -16,9 +16,15 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
 ## Libraries for Data Processing
-from pandas import DataFrame, ExcelWriter,merge
+from pandas import DataFrame, ExcelWriter,merge,read_excel
 from bs4 import BeautifulSoup
 import time,datetime,re,math
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import urllib3
+
+
+requests.packages.urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class CustomTransport(Transport):
@@ -126,6 +132,7 @@ class Cluster():
         SERVICE_BINDING_NAME = "{http://cisco.com/ccm/serviceability/soap/ControlCenterServices/}ControlCenterServicesBinding"
         SERVICE_ADDR="https://"+ip+":8443/controlcenterservice/services/ControlCenterServicesPort"
         try:
+            print ("Fetching Services Status from "+ip)
             client = Client(wsdl=servicewsdl, transport=transport, plugins=[history])
             Servicexl = client.create_service(SERVICE_BINDING_NAME,SERVICE_ADDR)
             result=Servicexl.soapGetServiceStatus([''])
@@ -144,6 +151,8 @@ class Cluster():
                 temp_zeep_service_list=list(services.result()['ServiceInfoList'])
                 temp_services=[serialize_object(value) for value in temp_zeep_service_list]
                 temp_df=DataFrame.from_dict(temp_services,orient='columns')
+                temp_df['ReasonCodeString']=temp_df['ReasonCodeString'].fillna('Activiated',inplace=True)
+                #temp_df.drop('ReasonCode',axis=1,inplace=True)
                 self.nodedict[node].services=temp_df
             except:
                 self.nodedict[node].services="Cannot Find Services"
@@ -213,7 +222,7 @@ class Cluster():
         devicesql=" d.name as DeviceName, tm.name as Model ,tc.name as DeviceClass ,dp.name as Devicepool from device as d left join typemodel as tm on d.tkmodel=tm.enum left join typeclass as tc on tc.enum=d.tkclass left join devicepool as dp on d.fkdevicepool=dp.pkid where d.tkclass in (1,2,4,5,12,18,19) and d.tkmodel!=645 order by DeviceName"
         axl_devices=self.phone_execute_axl("select"+devicesql)
         if axl_devices=="okay":
-            #print ("Devices list fetched from CUCM, running Registration checks")
+            print ("Devices list fetched from CUCM, running Registration checks")
             return None
         else:
             print (axl_devices)
@@ -255,7 +264,7 @@ class Cluster():
         phone_reg.reset_index(inplace=True)
         phone_reg.insert(3,'DuplicateCheck',phone_reg.duplicated(subset='DeviceName',keep='first'),allow_duplicates=True)
         phone_reg.drop(phone_reg[phone_reg.DuplicateCheck==True].index,inplace=True)
-        phone_reg.drop(columns='DuplicateCheck',inplace=True)
+        phone_reg.drop('DuplicateCheck',axis=1,inplace=True)
         Phone_Registration=merge(left=phones,right=phone_reg,left_on='DeviceName',right_on='DeviceName',how='left')
         self.phone_reg_data=Phone_Registration.loc[:,['DeviceName','desc','Status','Model','DevicePool','Aload','DirectoryNumber','IPAddress','Inload','node','Protocol','LoginUserId','TimeStamp']]
 
@@ -263,7 +272,7 @@ class Cluster():
         
         try:
             self.fetchdevicesAXL() ## fetch deviceList from AXL
-            print ("DeviceList Fetch!! getting Registration Report")
+            #print ("DeviceList Fetch!! getting Registration Report")
             hostname=list(self.devicedataframe['DeviceName'])
             chunked_hostname_list=list(self.chunks(hostname,800))
             ## Setup Session with the Publisher
@@ -272,9 +281,13 @@ class Cluster():
             session.auth = HTTPBasicAuth(self.axluser, self.axlpass)
             transport = CustomTransport(cache=SqliteCache(), session=session, timeout=60)
             history = HistoryPlugin()
+            print ("Total Connections for registration "+str(len(chunked_hostname_list)))
+            i=1
             for mac_list in chunked_hostname_list:
                 try:
+                    print ("Connection "+ str(i))
                     reg_result=self.getregisteration(mac_list,transport,history)
+                    i=i+1
                     try:
                         self.parse_reg_result(reg_result)
                     except(Fault,Exception) as error:
@@ -287,7 +300,7 @@ class Cluster():
                 print ("Error Compiling Registration Report !! Returning Raw Report\n")
                 print (error)
         except:
-            print ("Error fetching Devices through AXL")
+            print ("Error fetching Registration Report in main function")
             sys.exit()
         
         
