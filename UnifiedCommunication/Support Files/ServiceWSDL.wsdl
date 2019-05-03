@@ -1,0 +1,323 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:tns="http://cisco.com/ccm/serviceability/soap/ControlCenterServices/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ControlCenterServices" targetNamespace="http://cisco.com/ccm/serviceability/soap/ControlCenterServices/">
+	<!--
+=====================================================                                                   
+                    XML Schemas <======================================================
+-->
+	<types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+			xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" elementFormDefault="qualified" targetNamespace="http://cisco.com/ccm/serviceability/soap/ControlCenterServices/">
+			<!--
+ 
+		       StaticServiceList provides the service name , type, group and dependent services
+		      	
+-->
+			<simpleType name="ServiceTypes">
+				<restriction base="xsd:string">
+					<enumeration value="Service"/>
+					<enumeration value="Servlet"/>
+				</restriction>
+			</simpleType>
+			<complexType name="ArrayOfServices">
+				<complexContent>
+					<restriction base="SOAP-ENC:Array">
+						<sequence>
+							<element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="xsd:string"/>
+						</sequence>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="ServiceSpecification">
+				<sequence>
+					<element name="ServiceName" type="xsd:string"/>
+					<element name="ServiceType" type="tns:ServiceTypes"/>
+					<element name="Deployable" type="boolean"/>
+					<element name="GroupName" nillable="true" type="xsd:string"/>
+					<element name="DependentServices" nillable="true" type="tns:ArrayOfServices"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfServiceSpecification">
+				<complexContent>
+					<restriction base="SOAP-ENC:Array">
+						<attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ServiceSpecification[ ]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="StaticServiceList">
+				<sequence>
+					<element name="Services" type="tns:ArrayOfServiceSpecification"/>
+				</sequence>
+			</complexType>
+			<!--  
+		      DoDeploymentRequest-  
+		       -->
+			<simpleType name="DeployType">
+				<restriction base="xsd:string">
+					<enumeration value="Deploy"/>
+					<enumeration value="UnDeploy"/>
+				</restriction>
+			</simpleType>
+			<complexType name="DeploymentServiceRequest">
+				<sequence>
+					<element name="NodeName" nillable="true" type="xsd:string"/>
+					<element name="DeployType" type="tns:DeployType"/>
+					<element name="ServiceList" type="tns:ArrayOfServices"/>
+				</sequence>
+			</complexType>
+			<!--  
+		        ControlServiceRequest
+		       -->
+			<simpleType name="ControlType">
+				<restriction base="xsd:string">
+					<enumeration value="Start"/>
+					<enumeration value="Stop"/>
+					<enumeration value="Restart"/>
+				</restriction>
+			</simpleType>
+			<complexType name="ControlServiceRequest">
+				<sequence>
+					<element name="NodeName" nillable="true" type="xsd:string"/>
+					<element name="ControlType" type="tns:ControlType"/>
+					<element name="ServiceList" type="tns:ArrayOfServices"/>
+				</sequence>
+			</complexType>
+			<!--  
+		        ServiceInformationResponse
+		       -->
+			<simpleType name="ReturnCode">
+				<restriction base="xsd:string"/>
+			</simpleType>
+			<simpleType name="ServiceStatus">
+				<restriction base="xsd:string">
+					<enumeration value="Started"/>
+					<enumeration value="Stopped"/>
+					<enumeration value="Starting"/>
+					<enumeration value="Stopping"/>
+					<enumeration value="Unknown"/>
+				</restriction>
+			</simpleType>
+			<complexType name="ServiceInformation">
+				<sequence>
+					<element name="ServiceName" type="xsd:string"/>
+					<element name="ServiceStatus" type="tns:ServiceStatus"/>
+					<element name="ReasonCode" type="xsd:integer"/>
+					<element name="ReasonCodeString" nillable="true" type="xsd:string"/>
+					<element name="StartTime" nillable="true" type="xsd:string"/>
+					<element name="UpTime" type="xsd:integer"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfServiceInformation">
+				<complexContent>
+					<restriction base="SOAP-ENC:Array">
+						<attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ServiceInformation[ ]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="ServiceInformationResponse">
+				<sequence>
+					<element name="ReturnCode" type="tns:ReturnCode"/>
+					<element name="ReasonCode" type="xsd:integer"/>
+					<element name="ReasonString" nillable="true" type="xsd:string"/>
+					<element name="ServiceInfoList" type="tns:ArrayOfServiceInformation"/>
+				</sequence>
+			</complexType>
+			<!--  
+			Get Product Information Response
+			 -->
+			<complexType name="InstalledProduct">
+				<sequence>
+					<element name="ProductName" type="xsd:string"/>
+					<element name="ProductVersion" type="xsd:string"/>
+					<element name="ProductDescription" type="xsd:string"/>
+					<element name="ProductID" type="xsd:string"/>
+					<element name="ShortName" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="ProductServiceSpecification">
+				<sequence>
+					<element name="ServiceName" type="xsd:string"/>
+					<element name="ServiceType" type="tns:ServiceTypes"/>
+					<element name="Deployable" type="boolean"/>
+					<element name="GroupName" type="xsd:string"/>
+					<element name="ProductID" type="xsd:string"/>
+					<element name="DependentServices" nillable="true" type="tns:ArrayOfServices"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfProductServiceSpecification">
+				<complexContent>
+					<restriction base="SOAP-ENC:Array">
+						<attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ProductServiceSpecification[ ]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="ArrayOfInstalledProducts">
+				<complexContent>
+					<restriction base="SOAP-ENC:Array">
+						<attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:InstalledProduct[ ]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="GetProductInformationListResponse">
+				<sequence>
+					<element name="ActiveServerVersion" type="xsd:string"/>
+					<element name="PrimaryNode" type="xsd:string"/>
+					<element name="SecondaryNode" type="xsd:string"/>
+					<element name="Products" type="tns:ArrayOfInstalledProducts"/>
+					<element name="Services" type="tns:ArrayOfProductServiceSpecification"/>
+				</sequence>
+			</complexType>
+		</schema>
+	</types>
+	<!--
+=====================================================                                                   
+    	<                   Message definitions <======================================================
+-->
+	<!--  Messages used by ControlCenterServicesPort -->
+	<message name="StaticServiceList">
+		<part name="StaticServiceList" type="tns:StaticServiceList"/>
+	</message>
+	<message name="GetServiceStatusList">
+		<part name="GetServiceStatusList" type="tns:ArrayOfServices"/>
+	</message>
+	<message name="DeploymentServiceRequest">
+		<part name="DeploymentServiceRequest" type="tns:DeploymentServiceRequest"/>
+	</message>
+	<message name="ControlServiceRequest">
+		<part name="ControlServiceRequest" type="tns:ControlServiceRequest"/>
+	</message>
+	<message name="ServiceInformationResponse">
+		<part name="ServiceInformationResponse" type="tns:ServiceInformationResponse"/>
+	</message>
+	<message name="messagestring">
+		<part name="ServiceInformationResponse" type="xsd:string"/>
+	</message>
+	<message name="GetProductInformationListResponse">
+		<part name="GetProductInformationListResponse" type="tns:GetProductInformationListResponse"/>
+	</message>
+	<!--
+=====================================================                                 
+    	<                   PortType definitions <======================================================
+-->
+	<portType name="ControlCenterServicesPort">
+		<documentation>
+Operation 1:: GetStaticServiceList:: One input string message and one output message StaticServiceList. StaticServiceList will be a all static list of services and servlets and their groups and Service Dependency that are controlled through Service Manager.
+		</documentation>
+		<operation name="soapGetStaticServiceList">
+			<input message="tns:messagestring"/>
+			<output message="tns:StaticServiceList"/>
+		</operation>
+		<documentation>
+Operation 2:: GetServiceStatus:: input message that contains list of services that need to be deployed or undeployed. output message will the response from Service Manager for the Service Deployment request.
+		</documentation>
+		<operation name="soapGetServiceStatus">
+			<input message="tns:GetServiceStatusList"/>
+			<output message="tns:ServiceInformationResponse"/>
+		</operation>
+		<documentation>
+Operation 3:: DoServiceDeployment:: input message that contains list of services that need to be deployed or undeployed. output message will the response from Service Manager for the Service Deployment request.
+		</documentation>
+		<operation name="soapDoServiceDeployment">
+			<input message="tns:DeploymentServiceRequest"/>
+			<output message="tns:ServiceInformationResponse"/>
+		</operation>
+		<documentation>
+Operation 4:: DoControlServices:: input message that contains list of services that needs to be started or stopped. output message will the response from Service Manager for the Service start ot stop request.
+		</documentation>
+		<operation name="soapDoControlServices">
+			<input message="tns:ControlServiceRequest"/>
+			<output message="tns:ServiceInformationResponse"/>
+		</operation>
+		<documentation>
+Operation 5:: GetProductInformationList:: This API provides installed product information list.
+		</documentation>
+		<operation name="GetProductInformationList">
+			<input message="tns:messagestring"/>
+			<output message="tns:GetProductInformationListResponse"/>
+		</operation>
+	</portType>
+	<!--
+=====================================================                                                   
+    	<                   Binding definitions <======================================================
+-->
+	<binding name="ControlCenterServicesBinding" type="tns:ControlCenterServicesPort">
+		<!--  uses UTF-8 encoding     -->
+		<!--  uses rpc style          -->
+		<!--  uses http transport     -->
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<documentation>
+Operation 1:: GetStaticServiceList:: Following operation provides the list of services and servlets that are available in the system including their group
+		</documentation>
+		<operation name="soapGetStaticServiceList">
+			<soap:operation soapAction="http://schemas.cisco.com/ast/soap/action/#ControlCenterServices#GetServiceList"/>
+			<input>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</input>
+			<output>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</output>
+		</operation>
+		<documentation>
+Operation 2:: GetServiceStatus:: Provides status for given set of services
+		</documentation>
+		<operation name="soapGetServiceStatus">
+			<soap:operation soapAction="http://schemas.cisco.com/ast/soap/action/#ControlCenterServices#GetServiceStatus"/>
+			<input>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</input>
+			<output>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</output>
+		</operation>
+		<documentation>
+Operation 3:: DoServiceDeployment:: deploys or undeploys the given set of services
+		</documentation>
+		<operation name="soapDoServiceDeployment">
+			<soap:operation soapAction="http://schemas.cisco.com/ast/soap/action/#ControlCenterServices#DoServiceDeployment"/>
+			<input>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</input>
+			<output>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</output>
+		</operation>
+		<documentation>
+Operation 4:: DoControlServices:: Starts or Stops the given set of services
+		</documentation>
+		<operation name="soapDoControlServices">
+			<soap:operation soapAction="http://schemas.cisco.com/ast/soap/action/#ControlCenterServices#DoControlServices"/>
+			<input>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</input>
+			<output>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</output>
+		</operation>
+		<documentation>
+Operation 5:: GetProductInformationList:: This API provides installed product information list.
+		</documentation>
+		<operation name="GetProductInformationList">
+			<soap:operation soapAction="http://schemas.cisco.com/ast/soap/action/#ControlCenterServices#GetProductInformationList"/>
+			<input>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</input>
+			<output>
+				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schemas.cisco.com/ast/soap/" use="encoded"/>
+			</output>
+		</operation>
+	</binding>
+	<!--
+=====================================================                                                
+    	<                   Service definitions <======================================================
+-->
+	<service name="ControlCenterServices">
+		<documentation>
+This SOAP Service Provides - Service Activation and Control Center Functionality
+		</documentation>
+		<port binding="tns:ControlCenterServicesBinding" name="ControlCenterServicesPort">
+			<soap:address location="https://10.104.207.12:8443/controlcenterservice/services/ControlCenterServicesPort"/>
+		</port>
+	</service>
+</definitions>
