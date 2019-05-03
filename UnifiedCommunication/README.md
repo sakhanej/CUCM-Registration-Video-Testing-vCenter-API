@@ -71,3 +71,18 @@
 
 ## Reference Code
 - Refer code **ReferenceCode.py** for quick KT. This code imports class and functions from "Cluster_Checks" and "firmwareanalysis".
+
+
+## Exception Handling
+- Print statements along with error codes are returned if any issue is faced:
+  - while fetching nodes from cluster
+  - while fetching device list through AXL
+  - while fetching registration report using RISWSDL
+  - while fetching services status using ServicesWSDL
+  
+## Future Possibilities
+- These files can you used as base and following feature sets can be developed.
+  - Fetching Registration Report for all devices\[SIP Trunks/ Media Resources etc]. **reg_data_frame** attributes contains raw     RIS data
+  - Perfmon WSDL can be included to exploit performance API i.e to start and restart the services etc.
+  - SelectCmDeviceExt is not implemented by this code as some issue were faced with duplicate/ wrong status being retunred.
+    But it can implemented after changing few attributes in the main file.
