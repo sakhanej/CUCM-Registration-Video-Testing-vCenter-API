@@ -19,8 +19,7 @@ Following are the pre-requisites for the script to function properly:
  - Convert python scripts to executable files (here is a small [video](https://www.youtube.com/watch?v=lOIJIk_maO4) on how it can be done).
  - **Unified Collaboration Products**:
     - Make sure following services are functioning properly:
-        - SOAP -Real-Time Service APIs
-	- SOAP -Performance Monitoring APIs
+        - SOAP ( Real-Time Service APIs and Performance Monitoring APIs)
         - Cisco AXL Web Service
     - Configure 1 application user with following roles:
         - Standard AXL API Access
