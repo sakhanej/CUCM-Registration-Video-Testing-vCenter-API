@@ -25,7 +25,7 @@
       - Firmware Analysis Report (dataframe)
 
 
-## How to use files:
+## How to use
 **Methods and Attributes available:**
 
 - Import Cluster Object from this file
@@ -69,5 +69,5 @@
        - Report can be used as input to further script logic.
 
 
-## Reference Code : 
+## Reference Code
 - Refer code **ReferenceCode.py** for quick KT. This code imports class and functions from "Cluster_Checks" and "firmwareanalysis".
