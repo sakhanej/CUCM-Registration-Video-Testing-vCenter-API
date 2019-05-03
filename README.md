@@ -1,8 +1,18 @@
-# CiscoLive2019
-Automation Scripts for Gateway/ CUCM Automation
-This Respository Contains Python Scripts which can be used to achieve following tasks
-1. Gateway Type Analysis
-2. BoM Creation / Recommended Replacements
-3. Registration Reports / Servicibility  on CUCM [ Using WSDL ]
-4. Vcenter Reports
-5. Phone Firmware Analysis
+# Introduction
+This repository can provide you python scripts which can be used:
+
+#### Unified Collaboration Products
+  1. CUCM Registration Reports
+  2. UC Services Status
+  3. CUCM Firmware Analysis
+  4. CUCM Login Checks
+#### Video Endpoints
+  5. Migrating Endpoints from VCS to CUCM
+  6. Operational Readiness Testing(ORT) of Video Endpoints
+#### Gateways
+  7. BoM Creation
+
+## Pre-Requisites:
+Following are the pre-requisites for the script to function properly.
+#### Environment
+  
