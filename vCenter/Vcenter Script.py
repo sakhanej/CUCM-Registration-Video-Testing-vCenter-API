@@ -109,4 +109,4 @@ def getdetails(vcenter,**kwargs):
         for key, value in esxi_vm_dict.items():
             value.to_excel(writer,sheet_name=key,index=False)
 
-getdetails(c,options=0,esxilist=['as-bgl-gdc-esxi-09.cisco.com'])
+getdetails(c,options=0,esxilist=['host1','host2'])
