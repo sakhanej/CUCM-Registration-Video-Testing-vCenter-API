@@ -166,6 +166,9 @@ class Cluster():
         riswsdl='https://'+self.Ipaddress+':8443/realtimeservice2/services/RISService70?wsdl'
         try:
             client = Client(wsdl=riswsdl, transport=transport, plugins=[history])
+            RIS_BINDING = "{http://schemas.cisco.com/ast/soap}RisBinding"
+            RIS_ADDR = 'https://'+self.Ipaddress+':8443/realtimeservice2/services/RISService70?wsdl'
+            risAxl = client.create_service(RIS_BINDING,RIS_ADDR)
             factory = client.type_factory('ns0')
             item=[]
             for mac in macs:
@@ -173,7 +176,7 @@ class Cluster():
             Item = factory.ArrayOfSelectItem(item)
             stateInfo = ''
             criteria = factory.CmSelectionCriteria(MaxReturnedDevices = 1000,Status='Any',NodeName='',SelectBy='Name',SelectItems=Item)
-            result = client.service.selectCmDevice(stateInfo, criteria)
+            result = risAxl.selectCmDevice(stateInfo, criteria)
             return result
         except (Fault,Exception) as error:
             print ("Error in getting RIS report from publisher\n"+ error)
